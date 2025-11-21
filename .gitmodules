@@ -1,0 +1,12 @@
+[submodule "modules/JUCE"]
+	path = modules/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "modules/external/googletest"]
+	path = modules/external/googletest
+	url = https://github.com/google/googletest.git
+[submodule "modules/external/xsimd"]
+	path = modules/external/xsimd
+	url = https://github.com/xtensor-stack/xsimd.git
+[submodule "modules/external/cmake-includes"]
+	path = modules/external/cmake-includes
+	url = https://github.com/sudara/cmake-includes.git

@@ -1,0 +1,38 @@
+# Normalize line endings for all text files
+* text=auto
+
+# Enforce LF for Unix-y scripts
+*.sh text eol=lf
+*.py text eol=lf
+*.bash text eol=lf
+
+# Enforce CRLF for Windows batch scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat common binary formats as binary (no diffs, no EOL changes)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.7z binary
+*.gz binary
+*.bz2 binary
+*.xz binary
+*.dmg binary
+*.exe binary
+*.dll binary
+*.lib binary
+*.a binary
+
+# GitHub linguist: mark vendored third-party code
+modules/JUCE/** linguist-vendored
+modules/external/** linguist-vendored
+
+# Exclude local/dev directories from archive exports
+.idea/ export-ignore
+.github/ export-ignore
