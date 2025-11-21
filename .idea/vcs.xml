@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/JUCE" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/external/cmake-includes" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/external/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/external/xsimd" vcs="Git" />
   </component>
 </project>
