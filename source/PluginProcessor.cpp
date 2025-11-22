@@ -4,14 +4,12 @@
 //==============================================================================
 PluginProcessor::PluginProcessor() : AudioProcessor(BusesProperties()
                          .withInput("Input", juce::AudioChannelSet::stereo(), true)
-                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
-    )
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+                            params(vts)
 {
 }
 
-PluginProcessor::~PluginProcessor()
-{
-}
+PluginProcessor::~PluginProcessor() = default;
 
 //==============================================================================
 const juce::String PluginProcessor::getName() const
@@ -122,17 +120,24 @@ bool PluginProcessor::hasEditor() const
 }
 
 juce::AudioProcessorEditor *PluginProcessor::createEditor()
-{ // Use generic gui for editor for now
-    return new PluginEditor(*this);
+{
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void PluginProcessor::getStateInformation(juce::MemoryBlock &destData)
+void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
+    copyXmlToBinary(*vts.copyState().createXml(), destData);
 }
 
-void PluginProcessor::setStateInformation(const void *data, int sizeInBytes)
+void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    // Restore the parameters state from the given data
+    const std::unique_ptr xml(getXmlFromBinary(data, sizeInBytes));
+    if (xml.get() != nullptr && xml->hasTagName(vts.state.getType()))
+    {
+        vts.replaceState(juce::ValueTree::fromXml(*xml));
+    }
 }
 
 //==============================================================================
