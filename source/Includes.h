@@ -7,6 +7,10 @@
 #define DONT_SET_USING_JUCE_NAMESPACE 1
 #endif
 
+#include <cmath>
+#include <memory>
+#include <array>
+#include <vector>
 #include <juce_audio_plugin_client/juce_audio_plugin_client.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_extra/juce_gui_extra.h>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CodeInsightSettings">
+    <!-- Disable automatic code completion popup -->
+    <option name="AUTO_POPUP_COMPLETION_LOOKUP" value="false" />
+    <!-- Disable automatic parameter info popup -->
+    <option name="AUTO_POPUP_PARAMETER_INFO" value="false" />
+    <!-- Disable automatic quick documentation popup -->
+    <option name="AUTO_POPUP_JAVADOC_INFO" value="false" />
+    <!-- Be conservative with other hints/popups to reduce intrusiveness -->
+    <option name="SHOW_PARAMETER_NAME_HINTS" value="false" />
+  </component>
+  <!-- Note: Manual invocation of completion (e.g., Ctrl+Space) remains available per-user. -->
+</project>

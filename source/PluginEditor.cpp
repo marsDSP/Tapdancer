@@ -21,7 +21,16 @@ void PluginEditor::resized()
     const auto sync_height = juce::roundToInt(getHeight() * 0.05f);
     const auto sync_x_pos = getWidth() - sync_width - sync_padding;
     const auto sync_y_pos = sync_padding;
-    sync.setBounds(sync_x_pos, sync_y_pos, sync_width, sync_height);
+
+    syncInterval.setBounds(sync_x_pos, sync_y_pos, sync_width, sync_height);
+
+    // const auto sync_padding = juce::roundToInt(getWidth() * 0.03f);
+    // const auto sync_width = juce::roundToInt(getWidth() * 0.07f);
+    // const auto sync_height = juce::roundToInt(getHeight() * 0.05f);
+    // const auto sync_x_pos = getWidth() - sync_width - sync_padding;
+    // const auto sync_y_pos = sync_padding;
+
+    // oversampleChoice.setBounds(sync_x_pos, sync_y_pos, sync_width, sync_height);
 }
 
 void PluginEditor::setSyncMenu(juce::ComboBox& syncBox, const juce::StringArray& items)
@@ -29,4 +38,9 @@ void PluginEditor::setSyncMenu(juce::ComboBox& syncBox, const juce::StringArray&
     syncBox.addItemList(items, 1);
     syncBox.setSelectedId(1, juce::dontSendNotification);
     addAndMakeVisible(syncBox);
+}
+
+void setOSMenu(juce::ComboBox& OSbox, const juce::StringArray& oversample_items)
+{
+
 }

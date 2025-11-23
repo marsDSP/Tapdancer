@@ -76,9 +76,22 @@ void PluginProcessor::changeProgramName(int index, const juce::String &newName)
     juce::ignoreUnused(index, newName);
 }
 
+void PluginProcessor::parameterChanged(const juce::String& paramID, float newValue)
+{
+}
+
+void PluginProcessor::updateParameters() {
+    const auto oversampling_choice = params.oversamplingChoice->getIndex();
+    if (oversampling_choice >= 0 && static_cast<size_t>(oversampling_choice) < process_block.size())
+    {process_block[static_cast<size_t>(oversampling_choice)].updateParams(params);}
+}
+
 void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    juce::ignoreUnused(sampleRate, samplesPerBlock);
+    for (int i {}; i < process_block.size(); ++i)
+    {
+        process_block[i].prepare(sampleRate, samplesPerBlock, 2, i);
+    }
 }
 
 void PluginProcessor::releaseResources()
@@ -111,6 +124,21 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
                                    juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+
+    updateParameters();
+
+    // Ensure the active processing path receives the latest parameter targets
+    // so that its internal Smoothers can drive per-sample values.
+    const auto oversampleChoice = params.oversamplingChoice->getIndex();
+    if (oversampleChoice >= 0 && static_cast<size_t>(oversampleChoice) < process_block.size())
+    {
+        process_block[static_cast<size_t>(oversampleChoice)].updateParams(params);
+    }
+
+    juce::ScopedNoDenormals noDenormals;
+
+    if (oversampleChoice >= 0 && static_cast<size_t>(oversampleChoice) < process_block.size())
+        process_block[static_cast<size_t>(oversampleChoice)].process(buffer, buffer.getNumSamples());
 }
 
 //==============================================================================

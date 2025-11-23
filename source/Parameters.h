@@ -23,12 +23,14 @@ namespace MarsDSP {
 
         juce::AudioParameterFloat* gainInDb { nullptr };
         juce::AudioParameterFloat* mixPercent { nullptr };
+        juce::AudioParameterFloat* delayTimeMs { nullptr };
         juce::AudioParameterFloat* feedbackHz { nullptr };
+        juce::AudioParameterFloat* widePercent { nullptr };
         juce::AudioParameterFloat* hpfHz { nullptr };
         juce::AudioParameterFloat* lpfHz { nullptr };
-        juce::AudioParameterFloat* delayTimeMs { nullptr };
 
         juce::AudioParameterChoice* noteInterval { nullptr };
+        juce::AudioParameterChoice* oversamplingChoice { nullptr };
         juce::AudioParameterBool* sync { nullptr };
         juce::AudioParameterBool* bypass { nullptr };
 

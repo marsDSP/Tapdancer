@@ -71,11 +71,19 @@ add_compile_definitions(JUCE_PROJECT_NAME="${PROJECT_NAME}")
 
 # Define SharedCode as an INTERFACE library
 add_library(SharedCode INTERFACE
-        source/includes.h
+        source/Includes.h
         source/Parameters.cpp
         source/Parameters.h
         source/Globals.h
-        source/Converters.h)
+        source/Converters.h
+        source/Smoother.h
+        source/DSP/ProcessBlock.h
+        source/DSP/BaseProcessor.h
+        source/DSP/Delay/Lagrange5th.h
+        source/DSP/Delay/Interpolator.h
+        source/Utils/xSIMD.h
+        source/Utils/SIMDUtils.h
+        source/Utils/SampleTypeHelpers.h)
 
 # Set compile features for SharedCode
 target_compile_features(SharedCode INTERFACE cxx_std_20)
@@ -84,6 +92,7 @@ target_compile_features(SharedCode INTERFACE cxx_std_20)
 target_include_directories(SharedCode INTERFACE
         "${CMAKE_CURRENT_SOURCE_DIR}/source"
         "${CMAKE_CURRENT_SOURCE_DIR}/modules/JUCE/modules"
+        "${CMAKE_CURRENT_SOURCE_DIR}/modules/external/xsimd/include"
 )
 
 # Set JUCE flags for SharedCode

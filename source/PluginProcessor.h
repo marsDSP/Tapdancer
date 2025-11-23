@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Parameters.h"
+#include "DSP/ProcessBlock.h"
 
 class PluginProcessor final : public juce::AudioProcessor
-
 {
 public:
     PluginProcessor();
@@ -41,6 +41,11 @@ public:
 private:
 
     MarsDSP::Parameters params;
+
+    void updateParameters();
+    void parameterChanged (const juce::String& parameterID, float newValue);
+
+    std::array<MarsDSP::DSP::ProcessBlock, 5> process_block;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

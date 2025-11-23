@@ -3,6 +3,9 @@
 
 namespace MarsDSP {
 
+        inline const juce::ParameterID oversamplingChoiceID { "oversamplingChoice", 1 };
+        static constexpr const char* oversamplingChoiceName = "Oversample";
+
         inline const juce::ParameterID gainParamID { "gainInDb", 1 };
         static constexpr const char* gainParamIDName = "Gain";
 
@@ -11,6 +14,9 @@ namespace MarsDSP {
 
         inline const juce::ParameterID feedbackParamID { "feedbackHz", 1 };
         static constexpr const char* feedbackParamIDName = "Feedback";
+
+        inline const juce::ParameterID wideParamID { "widePercent", 1 };
+        static constexpr const char* wideParamIDName = "Wide";
 
         inline const juce::ParameterID hpfParamID { "hpfHz", 1 };
         static constexpr const char* hpfParamIDName = "HPF";
@@ -30,6 +36,11 @@ namespace MarsDSP {
         inline const juce::ParameterID bypassParamID { "bypass", 1 };
         static constexpr const char* bypassParamIDName = "Bypass";
         inline bool isBypassed = false;
+
+        inline const juce::StringArray oversample_items
+        {
+            "OFF", "2x", "4x", "8x", "16x"
+        };
 
         inline const juce::StringArray sync_notes
         {
