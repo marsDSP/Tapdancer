@@ -83,7 +83,8 @@ add_library(SharedCode INTERFACE
         source/DSP/Delay/Interpolator.h
         source/Utils/xSIMD.h
         source/Utils/SIMDUtils.h
-        source/Utils/SampleTypeHelpers.h)
+        source/Utils/SampleTypeHelpers.h
+        source/Protect.h)
 
 # Set compile features for SharedCode
 target_compile_features(SharedCode INTERFACE cxx_std_20)

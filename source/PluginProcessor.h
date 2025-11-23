@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Parameters.h"
+#include "Protect.h"
 #include "DSP/ProcessBlock.h"
 
 class PluginProcessor final : public juce::AudioProcessor

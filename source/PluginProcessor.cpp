@@ -139,6 +139,11 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     if (oversampleChoice >= 0 && static_cast<size_t>(oversampleChoice) < process_block.size())
         process_block[static_cast<size_t>(oversampleChoice)].process(buffer, buffer.getNumSamples());
+
+
+#ifdef JUCE_DEBUG
+    protectYourEars(buffer);
+#endif
 }
 
 //==============================================================================

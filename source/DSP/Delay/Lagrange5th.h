@@ -7,7 +7,7 @@
    Version:       1.0.0
    Namespace:     MarsDSP::DSP
    Description:   Uses Lagrange 5th Interpolation
-   Dependencies:  DelayInterpolation.h, ProcessBlock.h, Smoothers.h
+   Dependencies:  Interpolator.h, ProcessBlock.h, Smoothers.h
    License:       MIT License
 
 ==============================================================================
