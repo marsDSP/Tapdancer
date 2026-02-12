@@ -1,0 +1,15 @@
+[submodule "modules/JUCE"]
+	path = modules/JUCE
+	url = https://github.com/marsDSP/JUCE.git
+[submodule "modules/cmake-includes"]
+	path = modules/cmake-includes
+	url = https://github.com/sudara/cmake-includes.git
+[submodule "modules/xsimd"]
+	path = modules/xsimd
+	url = https://github.com/marsDSP/xsimd.git
+[submodule "modules/Catch2"]
+	path = modules/Catch2
+	url = https://github.com/marsDSP/Catch2.git
+[submodule "modules/pluginval"]
+	path = modules/pluginval
+	url = https://github.com/marsDSP/pluginval.git
