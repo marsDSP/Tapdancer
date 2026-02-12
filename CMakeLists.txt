@@ -20,7 +20,7 @@ if(BUILD_AUDIO_PLUGIN_HOST)
 endif()
 
 # Project configuration
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 # macOS-specific settings
 if(APPLE)
@@ -80,7 +80,7 @@ add_library(SharedCode INTERFACE
         source/utils/UnitConverter.h)
 
 # Set compile features for SharedCode
-target_compile_features(SharedCode INTERFACE cxx_std_20)
+target_compile_features(SharedCode INTERFACE cxx_std_23)
 
 # Include directories and compile definitions for SharedCode
 target_include_directories(SharedCode INTERFACE
@@ -143,6 +143,22 @@ file(GLOB_RECURSE Assets "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*")
 # Ensure the main project knows where its sources are
 target_include_directories("${PROJECT_NAME}" PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/source"
+)
+
+# -----------------------------------------------------------------------------
+# Offline repro executable (not part of the plugin build): used to quantify
+# loudness/peaks during aggressive delay-time automation.
+add_executable(DelayEngineRepro
+        tools/DelayEngineRepro.cpp
+)
+
+target_compile_features(DelayEngineRepro PRIVATE cxx_std_23)
+
+target_link_libraries(DelayEngineRepro PRIVATE
+        SharedCode
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_dsp
 )
 
 # Convenience run targets to launch AudioPluginHost for VST3 and AU debugging on macOS

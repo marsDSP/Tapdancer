@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "dsp/DelayEngine.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 
@@ -35,10 +36,12 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
-private:
+    juce::AudioProcessorValueTreeState apvts;
 
-    // division done once and not a million times
-    double invSampleRate = 1.0 / 44100.0;
+private:
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    DelayEngine<float> delay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
