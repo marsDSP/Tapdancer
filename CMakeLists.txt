@@ -72,7 +72,12 @@ add_compile_definitions(JUCE_PROJECT_NAME="${PROJECT_NAME}")
 
 # Define SharedCode as an INTERFACE library
 add_library(SharedCode INTERFACE
-        source/dsp/Engine.h)
+        source/dsp/DelayEngine.h
+        source/dsp/QCalc.h
+        source/dsp/Interpolator.h
+        source/dsp/BiquadEngine.h
+        source/dsp/ProcessBlock.h
+        source/utils/UnitConverter.h)
 
 # Set compile features for SharedCode
 target_compile_features(SharedCode INTERFACE cxx_std_20)

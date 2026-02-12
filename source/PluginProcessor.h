@@ -37,5 +37,8 @@ public:
 
 private:
 
+    // division done once and not a million times
+    double invSampleRate = 1.0 / 44100.0;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

@@ -1,0 +1,6 @@
+#pragma once
+
+#ifndef TAPDANCER_UNITCONVERTER_H
+#define TAPDANCER_UNITCONVERTER_H
+
+#endif
