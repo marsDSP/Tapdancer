@@ -126,6 +126,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     delay.setDelayTime(apvts.getRawParameterValue("delayTime")->load());
     delay.setMix(apvts.getRawParameterValue("mix")->load());
     delay.setFeedbackValues(apvts.getRawParameterValue("feedback")->load());
+    delay.setDiffusion(apvts.getRawParameterValue("diffusion")->load());
     delay.setMono(apvts.getRawParameterValue("mono")->load() >= 0.5f);
     delay.setBypassed(apvts.getRawParameterValue("bypass")->load() >= 0.5f);
 
@@ -184,6 +185,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
         juce::NormalisableRange<float>(0.0f, 0.99f, 0.01f),
         0.3f,
         juce::AudioParameterFloatAttributes().withLabel("%")));
+
+    layout.add (std::make_unique<juce::AudioParameterFloat> (
+        juce::ParameterID ("diffusion", 1),
+        "Diffusion",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f),
+        0.0f));
 
     layout.add(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID("mono", 1),

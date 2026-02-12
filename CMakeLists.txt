@@ -150,6 +150,7 @@ target_include_directories("${PROJECT_NAME}" PRIVATE
 # loudness/peaks during aggressive delay-time automation.
 add_executable(DelayEngineRepro
         tools/DelayEngineRepro.cpp
+        source/dsp/HadamardFDN.h
 )
 
 target_compile_features(DelayEngineRepro PRIVATE cxx_std_23)

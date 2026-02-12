@@ -94,6 +94,10 @@ public:
             }
         }
         else {
+            const SampleType diffusionParam = static_cast<SampleType> (juce::jlimit (0.0f, 1.0f, diffusion));
+            const SampleType oneMinusD = static_cast<SampleType> (1) - diffusionParam;
+            const SampleType invSqrt2 = static_cast<SampleType> (0.7071067811865475244);
+
             for (auto n {0uz}; n < static_cast<size_t>(numSmp); ++n) {
                 const SampleType dSmp    = smoothedDelay.getNextValue();
                 const SampleType mixParam = smoothedMix.getNextValue();
@@ -104,25 +108,60 @@ public:
                 prevDelaySamples = dSmp;
                 updateDuckGain(modSpeed);
 
-                if (ch0 != nullptr) {
-                    const SampleType xL = ch0[n];
+                SampleType xL = static_cast<SampleType> (0);
+                SampleType xR = static_cast<SampleType> (0);
+                SampleType yLDucked = static_cast<SampleType> (0);
+                SampleType yRDucked = static_cast<SampleType> (0);
+
+                if (ch0 != nullptr)
+                {
+                    xL = ch0[n];
                     const int lastIndexL = (writeIndexL - 1 + bufferLength) % bufferLength;
-                    const SampleType yL = readInterpolated(bufferL.get(), lastIndexL, dSmp, lagrange5thL);
-                    const SampleType yLDucked = yL * duckGain;
-                    const SampleType writeValueL = softClip(xL + fbLParam * yLDucked);
-                    writeSample(bufferL.get(), writeIndexL, writeValueL);
-                    ch0[n] = softClip(yLDucked * mixParam + xL * (static_cast<SampleType>(1) - mixParam));
+                    const SampleType yL = readInterpolated (bufferL.get(), lastIndexL, dSmp, lagrange5thL);
+                    yLDucked = yL * duckGain;
                 }
 
-                if (ch1 != nullptr) {
-                    const SampleType xR = ch1[n];
+                if (ch1 != nullptr)
+                {
+                    xR = ch1[n];
                     const int lastIndexR = (writeIndexR - 1 + bufferLength) % bufferLength;
-                    const SampleType yR = readInterpolated(bufferR.get(), lastIndexR, dSmp, lagrange5thR);
-                    const SampleType yRDucked = yR * duckGain;
-                    const SampleType writeValueR = softClip(xR + fbRParam * yRDucked);
-                    writeSample(bufferR.get(), writeIndexR, writeValueR);
-                    ch1[n] = softClip(yRDucked * mixParam
-                           + xR * (static_cast<SampleType>(1) - mixParam));
+                    const SampleType yR = readInterpolated (bufferR.get(), lastIndexR, dSmp, lagrange5thR);
+                    yRDucked = yR * duckGain;
+                }
+
+                SampleType fbInL = yLDucked;
+                SampleType fbInR = yRDucked;
+                SampleType wetOutL = yLDucked;
+                SampleType wetOutR = yRDucked;
+
+                if (ch0 != nullptr && ch1 != nullptr)
+                {
+                    // 2x2 Hadamard (orthonormal) blended with identity:
+                    // [hL] = 1/sqrt(2) [ 1  1 ] [yL]
+                    // [hR]           [ 1 -1 ] [yR]
+                    const SampleType hL = invSqrt2 * (yLDucked + yRDucked);
+                    const SampleType hR = invSqrt2 * (yLDucked - yRDucked);
+
+                    wetOutL = oneMinusD * yLDucked + diffusionParam * hL;
+                    wetOutR = oneMinusD * yRDucked + diffusionParam * hR;
+
+                    // Use the same diffused signal for the feedback input.
+                    fbInL = wetOutL;
+                    fbInR = wetOutR;
+                }
+
+                if (ch0 != nullptr)
+                {
+                    const SampleType writeValueL = softClip (xL + fbLParam * fbInL);
+                    writeSample (bufferL.get(), writeIndexL, writeValueL);
+                    ch0[n] = softClip (wetOutL * mixParam + xL * (static_cast<SampleType> (1) - mixParam));
+                }
+
+                if (ch1 != nullptr)
+                {
+                    const SampleType writeValueR = softClip (xR + fbRParam * fbInR);
+                    writeSample (bufferR.get(), writeIndexR, writeValueR);
+                    ch1[n] = softClip (wetOutR * mixParam + xR * (static_cast<SampleType> (1) - mixParam));
                 }
             }
         }
@@ -265,6 +304,11 @@ public:
         feedbackR = fb;
     }
 
+    void setDiffusion (float amount) noexcept
+    {
+        diffusion = juce::jlimit (0.0f, 1.0f, amount);
+    }
+
 private:
 
     static constexpr float minDelayTime = 5.0f;
@@ -275,6 +319,7 @@ private:
     float feedbackL = 0.0f;
     float feedbackR = 0.0f;
     float mix { 1.0f };
+    float diffusion { 0.0f };
 
     // per-sample smoothing
     juce::SmoothedValue<SampleType> smoothedDelay;
