@@ -1,0 +1,15 @@
+[submodule "libs/gcem"]
+	path = libs/gcem
+	url = https://github.com/marsDSP/gcem.git
+[submodule "libs/xsimd"]
+	path = libs/xsimd
+	url = https://github.com/marsDSP/xsimd.git
+[submodule "libs/kfr"]
+	path = libs/kfr
+	url = https://github.com/marsDSP/kfr.git
+[submodule "libs/JUCE"]
+	path = libs/JUCE
+	url = https://github.com/marsDSP/JUCE.git
+[submodule "libs/tracy"]
+	path = libs/tracy
+	url = https://github.com/marsDSP/tracy.git
