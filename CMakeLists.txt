@@ -201,3 +201,6 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 endif()]]
+
+# Add test harness
+add_subdirectory(tests/simd_harness)
