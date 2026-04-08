@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "utils/helpers/overload.h"
 
 //==============================================================================
 class ChronosProcessor final : public juce::AudioProcessor

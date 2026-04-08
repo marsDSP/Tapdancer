@@ -121,6 +121,11 @@ void ChronosProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 {
     juce::ignoreUnused (buffer, midiMessages);
     juce::ScopedNoDenormals noDenormals;
+
+#if JUCE_DEBUG
+    MarsDSP::overloaded(buffer);
+#endif
+
 }
 
 //==============================================================================
