@@ -13,10 +13,10 @@ int main()
     const int steps = 4096; // more points for smoother curves
     const float step_size = (end - start) / steps;
 
-    std::ofstream csv("tests/simd_harness/logs/simd_results.csv");
+    std::ofstream csv("tests/simd_harness/logs/simd_sin_results.csv");
     if (!csv.is_open())
     {
-        std::cerr << "Failed to open tests/simd_harness/logs/simd_results.csv" << std::endl;
+        std::cerr << "Failed to open tests/simd_harness/logs/simd_sin_results.csv" << std::endl;
         return 1;
     }
 
@@ -74,7 +74,7 @@ int main()
     }
 
     csv.close();
-    std::cout << "Successfully generated tests/simd_harness/logs/simd_results.csv with " << (steps + 1) << " data points." << std::endl;
+    std::cout << "Successfully generated tests/simd_harness/logs/simd_sin_results.csv with " << (steps + 1) << " data points." << std::endl;
 
     return 0;
 }

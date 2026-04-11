@@ -10,7 +10,7 @@
 
 int main()
 {
-    const int blockSize = 1024;
+    const int blockSize = 512;
     const int iterations = 1000000;
 
     // Ensure the logs directory exists
@@ -24,15 +24,15 @@ int main()
 
     std::vector<float> output(blockSize);
 
-    std::cout << "Benchmarking sine implementations (Block Size: " << blockSize << ", Iterations: " << iterations << ")..." << std::endl;
+    std::cout << "Benchmarking cosine implementations (Block Size: " << blockSize << ", Iterations: " << iterations << ")..." << std::endl;
 
-    // 1. Benchmark std::sin (Scalar Baseline)
+    // 1. Benchmark std::cos (Scalar Baseline)
     auto start = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < iterations; ++it)
     {
         for (int i = 0; i < blockSize; ++i)
         {
-            output[i] = std::sin(input[i]);
+            output[i] = std::cos(input[i]);
         }
         // Use the output to prevent compiler optimization
         if (output[0] > 100.0f) std::cout << "Never happens";
@@ -46,7 +46,7 @@ int main()
     {
         for (int i = 0; i < blockSize; ++i)
         {
-            output[i] = MarsDSP::padeSinApprox(input[i]);
+            output[i] = MarsDSP::padeCosApprox(input[i]);
         }
         if (output[0] > 100.0f) std::cout << "Never happens";
     }
@@ -60,7 +60,7 @@ int main()
         for (int i = 0; i < blockSize; i += 4)
         {
             SIMD_M128 vx = SIMD_MM(loadu_ps)(&input[i]);
-            SIMD_M128 vres = MarsDSP::fasterSin(vx);
+            SIMD_M128 vres = MarsDSP::fasterCos(vx);
             SIMD_MM(storeu_ps)(&output[i], vres);
         }
         if (output[0] > 100.0f) std::cout << "Never happens";
@@ -69,24 +69,24 @@ int main()
     double timeSimd = std::chrono::duration<double, std::micro>(end - start).count() / iterations;
 
     // Output to CSV
-    std::ofstream csv("tests/perf_harness/logs/perf_results.csv");
+    std::ofstream csv("tests/perf_harness/logs/perf_cos_results.csv");
     if (!csv.is_open())
     {
-        std::cerr << "Failed to open tests/perf_harness/logs/perf_results.csv" << std::endl;
+        std::cerr << "Failed to open tests/perf_harness/logs/perf_cos_results.csv" << std::endl;
         return 1;
     }
 
     csv << "algorithm,avg_time_us,speedup\n";
     csv << std::fixed << std::setprecision(6);
-    csv << "std::sin," << timeStd << ",1.0\n";
-    csv << "Pade (Scalar)," << timeScalar << "," << (timeStd / timeScalar) << "\n";
-    csv << "Pade (SIMD)," << timeSimd << "," << (timeStd / timeSimd) << "\n";
+    csv << "std::cos," << timeStd << ",1.0\n";
+    csv << "Pade Cos (Scalar)," << timeScalar << "," << (timeStd / timeScalar) << "\n";
+    csv << "Pade Cos (SIMD)," << timeSimd << "," << (timeStd / timeSimd) << "\n";
     csv.close();
 
     std::cout << "\nResults (Average time per block of " << blockSize << " samples):" << std::endl;
-    std::cout << "  std::sin:       " << std::setw(8) << timeStd << " us" << std::endl;
-    std::cout << "  Pade (Scalar):  " << std::setw(8) << timeScalar << " us (" << (timeStd / timeScalar) << "x faster)" << std::endl;
-    std::cout << "  Pade (SIMD):    " << std::setw(8) << timeSimd << " us (" << (timeStd / timeSimd) << "x faster)" << std::endl;
+    std::cout << "  std::cos:          " << std::setw(8) << timeStd << " us" << std::endl;
+    std::cout << "  Pade Cos (Scalar): " << std::setw(8) << timeScalar << " us (" << (timeStd / timeScalar) << "x faster)" << std::endl;
+    std::cout << "  Pade Cos (SIMD):   " << std::setw(8) << timeSimd << " us (" << (timeStd / timeSimd) << "x faster)" << std::endl;
 
     return 0;
 }

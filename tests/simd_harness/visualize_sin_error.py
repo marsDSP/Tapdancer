@@ -1,7 +1,7 @@
 import csv
 import os
 
-def generate_svg(data, filename="error_visualization.svg"):
+def generate_svg(data, filename="sin_error_visualization.svg"):
     width, height = 1000, 800
     margin = 60
     panel_height = (height - 3 * margin) // 2
@@ -88,8 +88,8 @@ def generate_svg(data, filename="error_visualization.svg"):
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_file = os.path.join(script_dir, "logs", "simd_results.csv")
-    output_file = os.path.join(script_dir, "logs", "error_visualization.svg")
+    csv_file = os.path.join(script_dir, "logs", "simd_sin_results.csv")
+    output_file = os.path.join(script_dir, "logs", "sin_error_visualization.svg")
 
     if not os.path.exists(csv_file):
         print(f"Error: {csv_file} not found. Run the C++ test first (from project root).")

@@ -1,7 +1,7 @@
 import csv
 import os
 
-def generate_svg(data, filename="perf_visualization.svg"):
+def generate_svg(data, filename="perf_cos_visualization.svg"):
     width, height = 800, 600
     margin = 100
     bar_width = 150
@@ -24,8 +24,8 @@ def generate_svg(data, filename="perf_visualization.svg"):
         f.write('<rect width="100%" height="100%" fill="#ffffff"/>\n')
         
         # Title
-        f.write(f'<text x="{width//2}" y="50" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold">SIMD Performance Comparison</text>\n')
-        f.write(f'<text x="{width//2}" y="75" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">Block Size: 512 samples | Average of 100,000 iterations</text>\n')
+        f.write(f'<text x="{width//2}" y="50" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold">SIMD Pade Cosine Performance</text>\n')
+        f.write(f'<text x="{width//2}" y="75" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">Block Size: 512 samples | Average of 1,000,000 iterations</text>\n')
         
         colors = ["#3498db", "#e74c3c", "#2ecc71"]
         
@@ -64,8 +64,8 @@ def generate_svg(data, filename="perf_visualization.svg"):
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_file = os.path.join(script_dir, "logs", "perf_results.csv")
-    output_file = os.path.join(script_dir, "logs", "perf_visualization.svg")
+    csv_file = os.path.join(script_dir, "logs", "perf_cos_results.csv")
+    output_file = os.path.join(script_dir, "logs", "perf_cos_visualization.svg")
     
     if not os.path.exists(csv_file):
         print(f"Error: {csv_file} not found. Run the C++ test first (from project root).")

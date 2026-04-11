@@ -1,0 +1,4 @@
+algorithm,avg_time_us,speedup
+std::cos,2.682319,1.0
+Pade Cos (Scalar),0.320422,8.371200
+Pade Cos (SIMD),0.307446,8.724512

@@ -101,7 +101,8 @@ add_library(SharedCode INTERFACE
         source/dsp/engine/delay/digital_engine.h
         source/utils/helpers/temposync.h
         source/dsp/math/fastermath.h
-        source/dsp/math/simd/simd_config.h)
+        source/dsp/math/simd/simd_config.h
+        source/utils/computers/taylor_cos.cpp)
 
 # Set compile features for SharedCode
 target_compile_features(SharedCode INTERFACE cxx_std_23)

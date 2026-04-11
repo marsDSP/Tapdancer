@@ -76,5 +76,64 @@ namespace MarsDSP::inline FasterMath
 
         return SIMD_MM(div_ps)(num, den);
     }
+//==============================================================================//
+    namespace PadeCosCoeffs
+    {
+        // cos(x) is an even function so signs are flipped relative to sin(x)
+        constexpr float N0 =  39251520.0f;    // num x⁰
+        constexpr float N1 = -18471600.0f;    // num x²
+        constexpr float N2 =  1075032.0f;     // num x⁴
+        constexpr float N3 = -14615.0f;       // num x⁶
+
+        constexpr float D0 =  39251520.0f;    // den x⁰
+        constexpr float D1 =  1154160.0f;     // den x²
+        constexpr float D2 =  16632.0f;       // den x⁴
+        constexpr float D3 =  127.0f;         // den x⁶
+    }
+
+    inline float padeCosApprox(const float x) noexcept
+    {
+        using namespace PadeCosCoeffs;
+
+        // cos depends only on x², confirming even symmetry
+        const auto x2 = x * x;
+
+        // horner evaluation inside-out in x²
+        const auto num = N0 + x2 * (N1 + x2 * (N2 + x2 * N3));
+        const auto den = D0 + x2 * (D1 + x2 * (D2 + x2 * D3));
+
+        return num / den;
+    }
+
+    inline SIMD_M128 fasterCos(const SIMD_M128 x) noexcept
+    {
+        using namespace PadeCosCoeffs;
+
+        // broadcast each coeff across 4 lanes
+        const auto vN0 = SIMD_MM(set_ps1)(N0);
+        const auto vN1 = SIMD_MM(set_ps1)(N1);
+        const auto vN2 = SIMD_MM(set_ps1)(N2);
+        const auto vN3 = SIMD_MM(set_ps1)(N3);
+
+        const auto vD0 = SIMD_MM(set_ps1)(D0);
+        const auto vD1 = SIMD_MM(set_ps1)(D1);
+        const auto vD2 = SIMD_MM(set_ps1)(D2);
+        const auto vD3 = SIMD_MM(set_ps1)(D3);
+
+        const auto x2 = SIMD_MM(mul_ps)(x, x);
+
+        // numerator: N0 + x²·(N1 + x²·(N2 + x²·N3))
+        auto numInner  = SIMD_MM(add_ps)(vN2, SIMD_MM(mul_ps)(x2, vN3));        // N2 + x²·N3
+        numInner       = SIMD_MM(add_ps)(vN1, SIMD_MM(mul_ps)(x2, numInner));   // N1 + x²·(…)
+        const auto num = SIMD_MM(add_ps)(vN0, SIMD_MM(mul_ps)(x2, numInner));   // N0 + x²·(…)
+
+        // denominator: D0 + x²·(D1 + x²·(D2 + x²·D3))
+        auto denInner  = SIMD_MM(add_ps)(vD2, SIMD_MM(mul_ps)(x2, vD3));        // D2 + x²·D3
+        denInner       = SIMD_MM(add_ps)(vD1, SIMD_MM(mul_ps)(x2, denInner));   // D1 + x²·(…)
+        const auto den = SIMD_MM(add_ps)(vD0, SIMD_MM(mul_ps)(x2, denInner));
+
+        return SIMD_MM(div_ps)(num, den);
+    }
+//==============================================================================//
 }
 #endif
