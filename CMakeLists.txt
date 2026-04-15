@@ -24,6 +24,13 @@ add_subdirectory(libs/JUCE)
 # Project configuration
 set(CMAKE_CXX_STANDARD 23)
 
+option(TRACY_ENABLE "Enable Tracy profiling" ON)
+
+option(TRACY_BUILD_VIEWER "Build Tracy viewer" ON)
+if(TRACY_BUILD_VIEWER)
+    add_subdirectory(libs/tracy/profiler)
+endif()
+
 # Find Python 3 for scripting support
 set(Python3_FIND_VIRTUALENV STANDARD)
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
@@ -57,8 +64,8 @@ add_custom_target(Run_CheckCMake
 
 # macOS-specific settings
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "Architectures" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum OS X deployment version" FORCE)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "Architectures")
     set(CMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET[arch=arm64] "11.0" CACHE STRING "arm 64 minimum deployment target" FORCE)
 endif()
 
@@ -111,6 +118,8 @@ target_compile_features(SharedCode INTERFACE cxx_std_23)
 cmake_policy(SET CMP0167 NEW)
 find_package(Boost REQUIRED)
 
+add_subdirectory(libs/tracy)
+
 target_include_directories(SharedCode INTERFACE
         "${CMAKE_CURRENT_SOURCE_DIR}/source"
         "${CMAKE_CURRENT_SOURCE_DIR}/libs"
@@ -120,7 +129,9 @@ target_include_directories(SharedCode INTERFACE
         "${GENERATED_DIR}"
 )
 
+target_link_libraries(SharedCode INTERFACE Tracy::TracyClient)
 target_link_libraries(SharedCode INTERFACE Boost::headers)
+
 
 # Set JUCE flags for SharedCode
 target_compile_definitions(SharedCode INTERFACE
@@ -133,6 +144,10 @@ target_compile_definitions(SharedCode INTERFACE
         JUCE_DISPLAY_SPLASH_SCREEN=0
         PRODUCT_NAME_WITHOUT_VERSION="${PRODUCT_NAME}"
 )
+
+if(TRACY_ENABLE)
+    target_compile_definitions(SharedCode INTERFACE TRACY_ENABLE)
+endif()
 
 # Add sources to the main project
 file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS

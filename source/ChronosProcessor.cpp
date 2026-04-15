@@ -1,5 +1,6 @@
 #include "ChronosProcessor.h"
 #include "ChronosEditor.h"
+#include <tracy/Tracy.hpp>
 
 //==============================================================================
 ChronosProcessor::ChronosProcessor()
@@ -121,11 +122,13 @@ void ChronosProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 {
     juce::ignoreUnused (buffer, midiMessages);
     juce::ScopedNoDenormals noDenormals;
+    ZoneScoped;
 
 #if JUCE_DEBUG
     MarsDSP::overloaded(buffer);
 #endif
 
+    FrameMark;
 }
 
 //==============================================================================
