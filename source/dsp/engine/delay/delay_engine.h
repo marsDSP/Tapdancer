@@ -734,7 +734,7 @@ namespace MarsDSP::DSP {
 
             void reset() noexcept { z1 = z2 = 0.0f; }
 
-            inline float processSample(float x) noexcept
+            float processSample(float x) noexcept
             {
                 const float y = b0 * x + z1;
                 z1 = b1 * x - a1 * y + z2;

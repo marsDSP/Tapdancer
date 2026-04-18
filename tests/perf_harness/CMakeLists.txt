@@ -8,6 +8,7 @@ add_executable(perf_cos_test perf_cos_test.cpp)
 add_executable(perf_tan_test perf_tan_test.cpp)
 add_executable(perf_tanh_test perf_tanh_test.cpp)
 add_executable(perf_boundtopi_test perf_boundtopi_test.cpp)
+add_executable(perf_delay_engine_test perf_delay_engine_test.cpp)
 
 # Enable optimizations for benchmark even in Debug profile
 if(MSVC)
@@ -16,12 +17,14 @@ if(MSVC)
     target_compile_options(perf_tan_test PRIVATE /O2)
     target_compile_options(perf_tanh_test PRIVATE /O2)
     target_compile_options(perf_boundtopi_test PRIVATE /O2)
+    target_compile_options(perf_delay_engine_test PRIVATE /O2)
 else()
     target_compile_options(perf_test PRIVATE -O3)
     target_compile_options(perf_cos_test PRIVATE -O3)
     target_compile_options(perf_tan_test PRIVATE -O3)
     target_compile_options(perf_tanh_test PRIVATE -O3)
     target_compile_options(perf_boundtopi_test PRIVATE -O3)
+    target_compile_options(perf_delay_engine_test PRIVATE -O3)
 endif()
 
 # Link against SharedCode from the main project
@@ -30,6 +33,19 @@ target_link_libraries(perf_cos_test PRIVATE SharedCode)
 target_link_libraries(perf_tan_test PRIVATE SharedCode)
 target_link_libraries(perf_tanh_test PRIVATE SharedCode)
 target_link_libraries(perf_boundtopi_test PRIVATE SharedCode)
+target_link_libraries(perf_delay_engine_test PRIVATE
+    SharedCode
+    juce::juce_audio_basics
+    juce::juce_audio_devices
+    juce::juce_audio_formats
+    juce::juce_audio_processors
+    juce::juce_core
+    juce::juce_dsp
+    juce::juce_events
+    juce::juce_graphics
+    juce::juce_gui_basics
+    juce::juce_gui_extra
+)
 
 # Ensure it's in a convenient location
 set_target_properties(perf_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
@@ -37,3 +53,4 @@ set_target_properties(perf_cos_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE
 set_target_properties(perf_tan_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set_target_properties(perf_tanh_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set_target_properties(perf_boundtopi_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+set_target_properties(perf_delay_engine_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
