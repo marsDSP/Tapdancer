@@ -236,12 +236,6 @@ namespace MarsDSP::inline FasterMath
         return padeTanhApprox(x);
     }
 
-    template<typename T>
-    inline T fasterTanhBounded(T x) noexcept
-    {
-        return static_cast<T>(padeTanhApprox(std::clamp(static_cast<float>(x), -5.0f, 5.0f)));
-    }
-
     inline SIMD_M128 fasterTanh(const SIMD_M128 x) noexcept
     {
         using namespace PadeTanhCoeffs;
@@ -268,6 +262,12 @@ namespace MarsDSP::inline FasterMath
         const auto den  = SIMD_MM(add_ps)(vD0, SIMD_MM(mul_ps)(x2, denInner));
 
         return SIMD_MM(div_ps)(num, den);
+    }
+
+    template<typename T>
+    T fasterTanhBounded(T x) noexcept
+    {
+        return static_cast<T>(padeTanhApprox(std::clamp(static_cast<float>(x), -5.0f, 5.0f)));
     }
 
     inline SIMD_M128 fasterTanhBounded(const SIMD_M128 x) noexcept

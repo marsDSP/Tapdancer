@@ -10,6 +10,8 @@ add_executable(simd_tanh_test simd_tanh_test.cpp)
 add_executable(simd_boundtopi_test simd_boundtopi_test.cpp)
 
 add_executable(simd_delay_engine_test simd_delay_engine_test.cpp)
+add_executable(simd_alignment_delay_test simd_alignment_delay_test.cpp)
+add_executable(simd_alignment_math_test simd_alignment_math_test.cpp)
 
 # Link against SharedCode from the main project
 target_link_libraries(simd_test PRIVATE SharedCode)
@@ -31,6 +33,22 @@ target_link_libraries(simd_delay_engine_test PRIVATE
     juce::juce_gui_extra
 )
 
+target_link_libraries(simd_alignment_delay_test PRIVATE 
+    SharedCode 
+    juce::juce_audio_basics
+    juce::juce_audio_devices
+    juce::juce_audio_formats
+    juce::juce_audio_processors
+    juce::juce_core
+    juce::juce_dsp
+    juce::juce_events
+    juce::juce_graphics
+    juce::juce_gui_basics
+    juce::juce_gui_extra
+)
+
+target_link_libraries(simd_alignment_math_test PRIVATE SharedCode)
+
 # Ensure it's in a convenient location
 set_target_properties(simd_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set_target_properties(simd_cos_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
@@ -38,3 +56,5 @@ set_target_properties(simd_tan_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE
 set_target_properties(simd_tanh_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set_target_properties(simd_boundtopi_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set_target_properties(simd_delay_engine_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+set_target_properties(simd_alignment_delay_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+set_target_properties(simd_alignment_math_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")

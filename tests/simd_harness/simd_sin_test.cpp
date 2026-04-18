@@ -20,7 +20,7 @@ int main()
         return 1;
     }
 
-    csv << "x,std_sin,pade_scalar,pade_simd,abs_err_scalar,abs_err_simd\n";
+    csv << "x,std_sin,pade_scalar,pade_simd,abs_err_scalar,abs_err_simd,diff_simd_scalar\n";
     csv << std::fixed << std::setprecision(10);
 
     for (int i = 0; i <= steps; i += 4)
@@ -63,13 +63,15 @@ int main()
 
             float err_scalar = std::abs(val_std - val_scalar);
             float err_simd = std::abs(val_std - val_simd);
+            float diff_simd_scalar = std::abs(val_scalar - val_simd);
 
             csv << x << ","
                 << val_std << ","
                 << val_scalar << ","
                 << val_simd << ","
                 << err_scalar << ","
-                << err_simd << "\n";
+                << err_simd << ","
+                << diff_simd_scalar << "\n";
         }
     }
 
