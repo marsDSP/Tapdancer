@@ -93,6 +93,24 @@ AudioProcessorValueTreeState::ParameterLayout ChronosProcessor::createParameterL
         NormalisableRange(0.0f, 0.99f, 0.01f), 0.3f,
         AudioParameterFloatAttributes().withLabel("%")));
 
+    // Feedback-path low-cut (highpass) corner frequency.
+    layout.add(std::make_unique<AudioParameterFloat>(
+        ParameterID("lowCut", 1), "Low Cut",
+        NormalisableRange(20.0f, 20000.0f, 1.0f, 0.3f), 20.0f,
+        AudioParameterFloatAttributes().withLabel("Hz")));
+
+    // Feedback-path high-cut (lowpass) corner frequency.
+    layout.add(std::make_unique<AudioParameterFloat>(
+        ParameterID("highCut", 1), "High Cut",
+        NormalisableRange(20.0f, 20000.0f, 1.0f, 0.3f), 20000.0f,
+        AudioParameterFloatAttributes().withLabel("Hz")));
+
+    // Stereo crossfeed (ping-pong amount). 0 = none, 1 = full swap.
+    layout.add(std::make_unique<AudioParameterFloat>(
+        ParameterID("crossfeed", 1), "Crossfeed",
+        NormalisableRange(0.0f, 1.0f, 0.01f), 0.0f,
+        AudioParameterFloatAttributes().withLabel("%")));
+
     layout.add(std::make_unique<AudioParameterBool>(
         ParameterID("mono", 1), "Mono", false));
 
@@ -152,6 +170,9 @@ void ChronosProcessor::processBlock (AudioBuffer<float> &buffer, MidiBuffer &mid
     delay.setDelayTimeParam(apvts.getRawParameterValue("delayTime")->load());
     delay.setMixParam(apvts.getRawParameterValue("mix")->load());
     delay.setFeedbackParam(apvts.getRawParameterValue("feedback")->load());
+    delay.setLowCutParam(apvts.getRawParameterValue("lowCut")->load());
+    delay.setHighCutParam(apvts.getRawParameterValue("highCut")->load());
+    delay.setCrossfeedParam(apvts.getRawParameterValue("crossfeed")->load());
     delay.setMono(apvts.getRawParameterValue("mono")->load() >= 0.5f);
     delay.setBypassed(apvts.getRawParameterValue("bypass")->load() >= 0.5f);
 
